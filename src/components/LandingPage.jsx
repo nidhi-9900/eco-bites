@@ -9,8 +9,14 @@ export default function LandingPage() {
   const router = useRouter();
 
   useEffect(() => {
+    // Redirect to scanner when user is authenticated
     if (!loading && user) {
-      router.push('/scanner');
+      console.log('✅ User authenticated, redirecting to scanner...', user.email);
+      // Use a small timeout to ensure state is fully updated
+      const timer = setTimeout(() => {
+        router.replace('/scanner');
+      }, 100);
+      return () => clearTimeout(timer);
     }
   }, [user, loading, router]);
 
@@ -31,11 +37,16 @@ export default function LandingPage() {
 
   const handleSignIn = async () => {
     try {
-      // signInWithRedirect will redirect the user to Google, then back to our app
-      // No need to manually navigate - the redirect will bring them back
+      // signInWithPopup will open a popup (or fallback to redirect on mobile)
       await signInWithGoogle();
+      // If popup succeeds, user will be signed in and useEffect will redirect
+      // If redirect is used, user will be redirected to Google and back
     } catch (error) {
       console.error('Sign in error:', error);
+      // Don't show alert for popup-closed-by-user (user cancelled)
+      if (error.code !== 'auth/popup-closed-by-user') {
+        alert('Sign in failed: ' + (error.message || 'Unknown error'));
+      }
     }
   };
 

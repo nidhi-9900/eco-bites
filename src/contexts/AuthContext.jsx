@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { 
   onAuthStateChanged, 
+  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   signOut as firebaseSignOut,
@@ -30,30 +31,32 @@ export function AuthProvider({ children }) {
     }
 
     let unsubscribe = null;
+    let isMounted = true;
 
-    // Check for redirect result first (when user returns from Google sign-in)
+    // Check for redirect result first (fallback for mobile)
     const checkRedirectResult = async () => {
       try {
         const result = await getRedirectResult(auth);
-        if (result) {
-          // User successfully signed in via redirect
-          // The onAuthStateChanged listener will also fire, so we don't need to set user here
+        if (result && isMounted) {
+          console.log('✅ Redirect sign-in successful (fallback):', result.user.email);
         }
       } catch (error) {
-        console.error('Error getting redirect result:', error);
-      } finally {
-        // Set up auth state listener
-        unsubscribe = onAuthStateChanged(auth, (user) => {
-          setUser(user);
-          setLoading(false);
-        });
+        // No redirect result - that's fine, we'll use popup primarily
       }
     };
 
     checkRedirectResult();
 
+    // Set up auth state listener
+    unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!isMounted) return;
+      setUser(user);
+      setLoading(false);
+    });
+
     // Cleanup function
     return () => {
+      isMounted = false;
       if (unsubscribe) {
         unsubscribe();
       }
@@ -62,16 +65,42 @@ export function AuthProvider({ children }) {
 
   const signInWithGoogle = async () => {
     if (!auth || !googleProvider) {
+      console.error('❌ Firebase not configured');
       throw new Error('Firebase not configured');
     }
+    
+    // Try popup first (works better on desktop)
     try {
-      // Use redirect instead of popup for better mobile support
-      await signInWithRedirect(auth, googleProvider);
-      // Note: The function will redirect the user, so this line won't execute
-      // The redirect result will be handled in the useEffect above
-    } catch (error) {
-      console.error('Error signing in with Google:', error);
-      throw error;
+      console.log('🚀 Attempting Google sign-in with popup...');
+      await signInWithPopup(auth, googleProvider);
+      console.log('✅ Popup sign-in successful');
+    } catch (popupError) {
+      // Don't fall back if user closed the popup intentionally
+      if (popupError.code === 'auth/popup-closed-by-user') {
+        console.log('ℹ️ User closed the popup');
+        throw popupError;
+      }
+      
+      // If popup is blocked or on mobile, fall back to redirect
+      console.log('⚠️ Popup failed, falling back to redirect:', popupError.message);
+      
+      // Check if it's a popup blocked error or mobile device
+      const isPopupBlocked = popupError.code === 'auth/popup-blocked';
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      if (isPopupBlocked || isMobile) {
+        try {
+          console.log('🔄 Using redirect method as fallback...');
+          await signInWithRedirect(auth, googleProvider);
+          // User will be redirected, so this won't execute
+        } catch (redirectError) {
+          console.error('❌ Redirect also failed:', redirectError);
+          throw redirectError;
+        }
+      } else {
+        // Re-throw the original popup error if it's not a popup-related issue
+        throw popupError;
+      }
     }
   };
 
