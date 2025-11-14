@@ -20,26 +20,15 @@ function DatasetContent() {
         {/* Header */}
         <header className="mb-8">
             <div className="flex justify-between items-center mb-4">
-              <div className="flex gap-3">
-                <Link
-                  href="/scanner"
-                  className="inline-flex items-center gap-2 px-4 py-2 text-yellow-600 hover:text-yellow-700 font-semibold rounded-2xl hover:bg-yellow-50 transition-all duration-300"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                  </svg>
-                  Back to Scanner
-                </Link>
-                <Link
-                  href="/profile"
-                  className="inline-flex items-center gap-2 px-4 py-2 text-yellow-600 hover:text-yellow-700 font-semibold rounded-2xl hover:bg-yellow-50 transition-all duration-300"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                  Profile
-                </Link>
-              </div>
+              <Link
+                href="/scanner"
+                className="inline-flex items-center gap-2 px-4 py-2 text-yellow-600 hover:text-yellow-700 font-semibold rounded-2xl hover:bg-yellow-50/50 transition-all duration-300"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Scanner
+              </Link>
               <UserMenu />
             </div>
           <div className="text-center">
@@ -53,7 +42,7 @@ function DatasetContent() {
         </header>
 
         {/* Instructions */}
-        <div className="bg-yellow-50 backdrop-blur-sm border border-yellow-200/50 rounded-2xl p-6 mb-6">
+        <div className="bg-yellow-50/70 backdrop-blur-sm border border-yellow-200/50 rounded-2xl p-6 mb-6">
           <h2 className="text-lg font-semibold text-yellow-900 mb-2">
             How to add a product:
           </h2>

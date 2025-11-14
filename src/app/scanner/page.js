@@ -123,26 +123,15 @@ function ScannerContent() {
           {/* Header */}
           <header className="mb-8">
             <div className="flex justify-between items-center mb-4">
-              <div className="flex gap-3">
-                <Link
-                  href="/dataset"
-                  className="inline-flex items-center gap-2 px-4 py-2 text-yellow-600 hover:text-yellow-700 font-semibold rounded-2xl hover:bg-yellow-50 transition-all duration-300"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                  </svg>
-                  Contribute
-                </Link>
-                <Link
-                  href="/profile"
-                  className="inline-flex items-center gap-2 px-4 py-2 text-yellow-600 hover:text-yellow-700 font-semibold rounded-2xl hover:bg-yellow-50 transition-all duration-300"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                  Profile
-                </Link>
-              </div>
+              <Link
+                href="/dataset"
+                className="inline-flex items-center gap-2 px-4 py-2 text-yellow-600 hover:text-yellow-700 font-semibold rounded-2xl hover:bg-yellow-50/50 transition-all duration-300"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                </svg>
+                Contribute
+              </Link>
               <UserMenu />
             </div>
             <div className="text-center">
@@ -156,7 +145,7 @@ function ScannerContent() {
           </header>
 
         {/* Image Upload Section */}
-        <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 mb-6">
+        <div className="bg-white/70 backdrop-blur-lg rounded-3xl shadow-xl border border-white/50 p-6 mb-6">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">
             Upload or Capture Food Product
           </h2>
@@ -189,7 +178,7 @@ function ScannerContent() {
               <button
                 onClick={handleReset}
                 disabled={loading}
-                className="px-6 py-3.5 bg-white hover:bg-gray-50 border border-gray-200 text-gray-800 rounded-2xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95"
+                className="px-6 py-3.5 bg-white/70 backdrop-blur-sm hover:bg-white/90 border border-white/50 text-gray-800 rounded-2xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95"
               >
                 Reset
               </button>
@@ -199,7 +188,7 @@ function ScannerContent() {
 
         {/* Error Display */}
         {error && (
-          <div className="bg-red-50 backdrop-blur-sm border border-red-200/50 rounded-2xl p-4 mb-6">
+          <div className="bg-red-50/70 backdrop-blur-sm border border-red-200/50 rounded-2xl p-4 mb-6">
             <p className="text-red-800 flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -211,7 +200,7 @@ function ScannerContent() {
 
         {/* Results Display */}
         {nutritionData && (
-          <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6 space-y-6">
+          <div className="bg-white/70 backdrop-blur-lg rounded-3xl shadow-xl border border-white/50 p-6 space-y-6">
             <div className="flex justify-between items-start">
               <div>
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">

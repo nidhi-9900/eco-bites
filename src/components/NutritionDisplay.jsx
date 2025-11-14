@@ -5,7 +5,7 @@ import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Responsi
 export default function NutritionDisplay({ nutrition }) {
   if (!nutrition) {
     return (
-      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+      <div className="text-center py-8 text-gray-500">
         No nutrition data available
       </div>
     );
@@ -28,7 +28,7 @@ export default function NutritionDisplay({ nutrition }) {
   return (
     <div className="space-y-6">
       {/* Radar Chart */}
-      <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-3xl p-6 border border-white/30 dark:border-gray-700/50 shadow-lg">
+      <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-6 border border-white/30 shadow-lg">
         <ResponsiveContainer width="100%" height={300}>
           <RadarChart data={radarData}>
             <PolarGrid stroke="#e5e7eb" />
@@ -64,40 +64,40 @@ export default function NutritionDisplay({ nutrition }) {
 
       {/* Nutrition Facts Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl p-4 border border-white/30 dark:border-gray-700/50 shadow-md hover:shadow-lg transition-shadow">
-          <div className="text-sm text-gray-600 dark:text-gray-400">Energy</div>
-          <div className="text-xl font-semibold text-gray-900 dark:text-white">
+        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-4 border border-white/30 shadow-md hover:shadow-lg transition-shadow">
+          <div className="text-sm text-gray-600">Energy</div>
+          <div className="text-xl font-semibold text-gray-900">
             {nutrition.energy || 0} kcal
           </div>
         </div>
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-          <div className="text-sm text-gray-600 dark:text-gray-400">Fat</div>
-          <div className="text-xl font-semibold text-gray-900 dark:text-white">
+        <div className="bg-white/50 backdrop-blur-sm rounded-lg p-4 border border-white/30">
+          <div className="text-sm text-gray-600">Fat</div>
+          <div className="text-xl font-semibold text-gray-900">
             {nutrition.fat || 0}g
           </div>
         </div>
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-          <div className="text-sm text-gray-600 dark:text-gray-400">Sugars</div>
-          <div className="text-xl font-semibold text-gray-900 dark:text-white">
+        <div className="bg-white/50 backdrop-blur-sm rounded-lg p-4 border border-white/30">
+          <div className="text-sm text-gray-600">Sugars</div>
+          <div className="text-xl font-semibold text-gray-900">
             {nutrition.sugars || 0}g
           </div>
         </div>
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-          <div className="text-sm text-gray-600 dark:text-gray-400">Salt</div>
-          <div className="text-xl font-semibold text-gray-900 dark:text-white">
+        <div className="bg-white/50 backdrop-blur-sm rounded-lg p-4 border border-white/30">
+          <div className="text-sm text-gray-600">Salt</div>
+          <div className="text-xl font-semibold text-gray-900">
             {nutrition.salt || 0}g
           </div>
         </div>
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-          <div className="text-sm text-gray-600 dark:text-gray-400">Protein</div>
-          <div className="text-xl font-semibold text-gray-900 dark:text-white">
+        <div className="bg-white/50 backdrop-blur-sm rounded-lg p-4 border border-white/30">
+          <div className="text-sm text-gray-600">Protein</div>
+          <div className="text-xl font-semibold text-gray-900">
             {nutrition.protein || 0}g
           </div>
         </div>
         {nutrition.fiber !== undefined && (
-          <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
-            <div className="text-sm text-gray-600 dark:text-gray-400">Fiber</div>
-            <div className="text-xl font-semibold text-gray-900 dark:text-white">
+          <div className="bg-white/50 backdrop-blur-sm rounded-lg p-4 border border-white/30">
+            <div className="text-sm text-gray-600">Fiber</div>
+            <div className="text-xl font-semibold text-gray-900">
               {nutrition.fiber || 0}g
             </div>
           </div>

@@ -126,7 +126,7 @@ function ProfileContent() {
           <div className="flex justify-between items-center mb-4">
             <Link
               href="/scanner"
-              className="inline-flex items-center gap-2 px-4 py-2 text-yellow-600 hover:text-yellow-700 dark:text-yellow-400 font-semibold rounded-2xl hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-all duration-300"
+              className="inline-flex items-center gap-2 px-4 py-2 text-yellow-600 hover:text-yellow-700 font-semibold rounded-2xl hover:bg-yellow-50/50 transition-all duration-300"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -205,7 +205,7 @@ function ProfileContent() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Badges Section */}
-          <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6">
+          <div className="bg-white/70 backdrop-blur-lg rounded-3xl shadow-xl border border-white/50 p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <span>🏆</span>
               Achievements & Badges
@@ -232,7 +232,7 @@ function ProfileContent() {
           </div>
 
           {/* Recent Contributions */}
-          <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6">
+          <div className="bg-white/70 backdrop-blur-lg rounded-3xl shadow-xl border border-white/50 p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <span>📝</span>
               Recent Contributions
@@ -267,7 +267,7 @@ function ProfileContent() {
         </div>
 
         {/* Points System Info */}
-        <div className="mt-6 bg-yellow-50 backdrop-blur-sm border border-yellow-200/50 rounded-2xl p-6">
+        <div className="mt-6 bg-yellow-50/70 backdrop-blur-sm border border-yellow-200/50 rounded-2xl p-6">
           <h3 className="text-lg font-semibold text-yellow-900 mb-3">
             💰 How to Earn Points
           </h3>
