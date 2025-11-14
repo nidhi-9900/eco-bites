@@ -148,8 +148,9 @@ Return ONLY the JSON, no additional text or markdown.`;
         const productNameLower = productInfo.name.toLowerCase().trim();
         const brandLower = productInfo.brand ? productInfo.brand.toLowerCase().trim() : null;
         
-        // Try exact match first
+        // Try exact match first - only get approved/verified products
         let query = adminDb.collection('sharedProducts')
+          .where('verified', '==', true)
           .where('productName', '>=', productNameLower)
           .where('productName', '<=', productNameLower + '\uf8ff')
           .limit(5);

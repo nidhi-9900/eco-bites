@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
-import { collection, query, orderBy, getDocs, doc, deleteDoc, addDoc, serverTimestamp, limit } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, doc, deleteDoc, addDoc, serverTimestamp, limit, getDoc, setDoc, increment } from 'firebase/firestore';
 import Toast from '@/components/Toast';
 
 export default function AdminPanel() {
@@ -87,7 +87,43 @@ export default function AdminPanel() {
       // Remove from pendingProducts
       await deleteDoc(doc(db, 'pendingProducts', id));
 
-      showToast('Product approved and added to shared database', 'success');
+      // Award points to the user who contributed
+      if (product.userId) {
+        try {
+          const userStatsRef = doc(db, 'userStats', product.userId);
+          const userStatsDoc = await getDoc(userStatsRef);
+          
+          if (userStatsDoc.exists()) {
+            const currentData = userStatsDoc.data();
+            const newPoints = (currentData.points || 0) + 10;
+            const newLevel = Math.floor(newPoints / 100) + 1;
+            
+            // Update existing stats with calculated level
+            await setDoc(userStatsRef, {
+              totalContributions: increment(1),
+              points: increment(10),
+              level: newLevel,
+              lastContributionAt: serverTimestamp(),
+            }, { merge: true });
+          } else {
+            // Create new stats document
+            await setDoc(userStatsRef, {
+              userId: product.userId,
+              totalContributions: 1,
+              totalScans: 0,
+              points: 10,
+              level: 1,
+              lastContributionAt: serverTimestamp(),
+              createdAt: serverTimestamp(),
+            });
+          }
+        } catch (pointsError) {
+          console.error('Error awarding points:', pointsError);
+          // Don't fail the approval if points fail
+        }
+      }
+
+      showToast('Product approved and added to shared database. User awarded 10 points!', 'success');
     } catch (error) {
       console.error('Error approving product:', error);
       showToast('Failed to approve product', 'error');
