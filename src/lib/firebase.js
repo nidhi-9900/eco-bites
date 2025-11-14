@@ -36,6 +36,9 @@ if (typeof window !== 'undefined' && isFirebaseConfigured()) {
   
   auth = getAuth(app);
   googleProvider = new GoogleAuthProvider();
+  // Add redirect URL for better mobile support
+  googleProvider.addScope('profile');
+  googleProvider.addScope('email');
   db = getFirestore(app);
 } else {
   // Create mock objects for server-side rendering
