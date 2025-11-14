@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { db } from '@/lib/firebase';
-import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy, limit, doc, getDoc } from 'firebase/firestore';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import UserMenu from '@/components/UserMenu';
 import Link from 'next/link';
@@ -34,57 +34,56 @@ function ProfileContent() {
         setLoading(false);
         setDataLoading(true);
 
-        // Run all queries in parallel for faster loading
-        // Optimize: Get recent contributions (limit 100) and use for both display and approximate count
+        // Try to get stats from userStats collection first (faster, pre-calculated)
+        const userStatsRef = doc(db, 'userStats', user.uid);
+        const userStatsDoc = await getDoc(userStatsRef);
+        
+        let userStatsData = null;
+        if (userStatsDoc.exists()) {
+          userStatsData = userStatsDoc.data();
+        }
+
+        // Run queries in parallel for recent contributions and scans count
         const [contributionsSnapshot, scansSnapshot, pendingSnapshot] = await Promise.all([
-          // Get approved contributions (limit to 100 for performance - counts are approximate for power users)
+          // Get recent approved contributions for display (limit to 5)
           getDocs(query(
             collection(db, 'sharedProducts'),
             where('userId', '==', user.uid),
             orderBy('timestamp', 'desc'),
-            limit(100)
+            limit(5)
           )),
-          // Get scans (limit to 1000 for performance)
+          // Get scans count (limit to 1000 for performance)
           getDocs(query(
             collection(db, 'scans'),
             where('userId', '==', user.uid),
             orderBy('timestamp', 'desc'),
             limit(1000)
           )),
-          // Get pending contributions
+          // Get pending contributions count
           getDocs(query(
             collection(db, 'pendingProducts'),
             where('userId', '==', user.uid)
           ))
         ]);
 
-        // Use contributions snapshot for both count and recent display
-        const contributionsCount = contributionsSnapshot.size;
+        // Use userStats if available (faster), otherwise calculate from queries
+        const contributionsCount = userStatsData?.totalContributions || contributionsSnapshot.size;
         const pendingCount = pendingSnapshot.size;
-        const scansCount = scansSnapshot.size;
-        
-        // Get recent 5 from the contributions we already fetched
-        const recentContributionsData = contributionsSnapshot.docs.slice(0, 5);
-
-        // Calculate points (10 points per approved contribution, 1 point per scan)
-        // Pending contributions don't count until approved
-        const points = (contributionsCount * 10) + scansCount;
-
-        // Calculate level (every 100 points = 1 level)
-        const level = Math.floor(points / 100) + 1;
-        const nextLevelPoints = level * 100;
+        const scansCount = userStatsData?.totalScans || scansSnapshot.size;
+        const points = userStatsData?.points || (contributionsCount * 10) + scansCount;
+        const level = userStatsData?.level || Math.floor(points / 100) + 1;
 
         setStats({
           totalContributions: contributionsCount + pendingCount, // Show total including pending
           totalScans: scansCount,
           points: points,
           level: level,
-          nextLevelPoints: nextLevelPoints,
+          nextLevelPoints: level * 100,
           progressToNextLevel: (points % 100) / 100,
         });
 
-        // Get recent contributions from the contributions we already fetched
-        const recent = recentContributionsData.map(doc => ({
+        // Get recent contributions
+        const recent = contributionsSnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
         }));

@@ -10,7 +10,7 @@ import UserMenu from '@/components/UserMenu';
 import ScoreInfo from '@/components/ScoreInfo';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, getDoc, setDoc, increment } from 'firebase/firestore';
 import { useAuth } from '@/contexts/AuthContext';
 
 function ScannerContent() {
@@ -80,6 +80,38 @@ function ScannerContent() {
             imageUrl: imagePreview,
             timestamp: serverTimestamp(),
           });
+
+          // Award 1 point for scan and update userStats
+          try {
+            const userStatsRef = doc(db, 'userStats', user.uid);
+            const userStatsDoc = await getDoc(userStatsRef);
+            
+            if (userStatsDoc.exists()) {
+              const currentData = userStatsDoc.data();
+              const newPoints = (currentData.points || 0) + 1;
+              const newLevel = Math.floor(newPoints / 100) + 1;
+              
+              await setDoc(userStatsRef, {
+                totalScans: increment(1),
+                points: increment(1),
+                level: newLevel,
+                lastScanAt: serverTimestamp(),
+              }, { merge: true });
+            } else {
+              await setDoc(userStatsRef, {
+                userId: user.uid,
+                totalContributions: 0,
+                totalScans: 1,
+                points: 1,
+                level: 1,
+                lastScanAt: serverTimestamp(),
+                createdAt: serverTimestamp(),
+              });
+            }
+          } catch (pointsError) {
+            console.error('Error awarding scan points:', pointsError);
+            // Don't fail the scan save if points fail
+          }
         } catch (dbError) {
           console.error('Error saving to database:', dbError);
           // Don't throw - analysis was successful
