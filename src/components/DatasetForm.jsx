@@ -6,6 +6,7 @@ import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import CameraCapture from '@/components/CameraCapture';
 import Toast from '@/components/Toast';
+import ScoreInfo from '@/components/ScoreInfo';
 
 export default function DatasetForm({ onSuccess, onCancel }) {
   const { user } = useAuth();
@@ -92,6 +93,14 @@ export default function DatasetForm({ onSuccess, onCancel }) {
   const handleNutritionCameraCapture = (file) => {
     handleImageFile(file, 'nutrition');
     setShowNutritionCamera(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const extractDataFromImages = async () => {
@@ -272,8 +281,21 @@ export default function DatasetForm({ onSuccess, onCancel }) {
     setNutritionImage(null);
     setProductPreview(null);
     setNutritionPreview(null);
-    setError(null);
-    setSuccess(false);
+    setFormData({
+      productName: '',
+      brand: '',
+      energy: '',
+      fat: '',
+      sugars: '',
+      salt: '',
+      protein: '',
+      fiber: '',
+      sodium: '',
+      ingredients: '',
+      allergens: '',
+      nutriScore: 'A',
+      ecoScore: 'B',
+    });
   };
 
   if (!user) {
@@ -670,38 +692,46 @@ export default function DatasetForm({ onSuccess, onCancel }) {
           
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
                 Nutri-Score
+                <ScoreInfo type="nutri" />
               </label>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                A 5-color label (A-E) indicating nutritional quality. A = best, E = lowest.
+              </p>
               <select
                 name="nutriScore"
                 value={formData.nutriScore}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white/80 dark:bg-gray-700/80 border border-gray-300/50 dark:border-gray-600/50 rounded-2xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
               >
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-                <option value="E">E</option>
+                <option value="A">A - Best</option>
+                <option value="B">B - Good</option>
+                <option value="C">C - Moderate</option>
+                <option value="D">D - Poor</option>
+                <option value="E">E - Worst</option>
               </select>
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
                 Eco-Score
+                <ScoreInfo type="eco" />
               </label>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                Environmental impact score (A-E). A = lowest impact, E = highest impact.
+              </p>
               <select
                 name="ecoScore"
                 value={formData.ecoScore}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-white/80 dark:bg-gray-700/80 border border-gray-300/50 dark:border-gray-600/50 rounded-2xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
               >
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-                <option value="E">E</option>
+                <option value="A">A - Best</option>
+                <option value="B">B - Good</option>
+                <option value="C">C - Moderate</option>
+                <option value="D">D - Poor</option>
+                <option value="E">E - Worst</option>
               </select>
             </div>
           </div>

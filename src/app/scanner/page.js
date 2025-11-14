@@ -7,6 +7,7 @@ import CameraCapture from '@/components/CameraCapture';
 import NutritionDisplay from '@/components/NutritionDisplay';
 import ScoreBadge from '@/components/ScoreBadge';
 import UserMenu from '@/components/UserMenu';
+import ScoreInfo from '@/components/ScoreInfo';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -122,15 +123,26 @@ function ScannerContent() {
           {/* Header */}
           <header className="mb-8">
             <div className="flex justify-between items-center mb-4">
-              <Link
-                href="/dataset"
-                className="inline-flex items-center gap-2 px-4 py-2 text-green-600 hover:text-green-700 dark:text-green-400 font-semibold rounded-2xl hover:bg-green-50 dark:hover:bg-green-900/20 transition-all duration-300"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                </svg>
-                Contribute to our Database
-              </Link>
+              <div className="flex gap-3">
+                <Link
+                  href="/dataset"
+                  className="inline-flex items-center gap-2 px-4 py-2 text-green-600 hover:text-green-700 dark:text-green-400 font-semibold rounded-2xl hover:bg-green-50 dark:hover:bg-green-900/20 transition-all duration-300"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                  </svg>
+                  Contribute
+                </Link>
+                <Link
+                  href="/profile"
+                  className="inline-flex items-center gap-2 px-4 py-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 font-semibold rounded-2xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  Profile
+                </Link>
+              </div>
               <UserMenu />
             </div>
             <div className="text-center">
@@ -211,14 +223,20 @@ function ScannerContent() {
                   </p>
                 )}
               </div>
-              <div className="flex gap-2">
-                {nutritionData.nutriScore && (
-                  <ScoreBadge score={nutritionData.nutriScore} label="Nutri" size="lg" />
-                )}
-                {nutritionData.ecoScore && (
-                  <ScoreBadge score={nutritionData.ecoScore} label="Eco" size="lg" />
-                )}
-              </div>
+                    <div className="flex gap-2 items-center">
+                      {nutritionData.nutriScore && (
+                        <div className="flex items-center gap-2">
+                          <ScoreBadge score={nutritionData.nutriScore} label="Nutri" size="lg" />
+                          <ScoreInfo type="nutri" />
+                        </div>
+                      )}
+                      {nutritionData.ecoScore && (
+                        <div className="flex items-center gap-2">
+                          <ScoreBadge score={nutritionData.ecoScore} label="Eco" size="lg" />
+                          <ScoreInfo type="eco" />
+                        </div>
+                      )}
+                    </div>
             </div>
 
             {nutritionData.description && (
