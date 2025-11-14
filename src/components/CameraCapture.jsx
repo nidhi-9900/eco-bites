@@ -72,8 +72,8 @@ export default function CameraCapture({ onCapture, onClose }) {
   if (error) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4">
-          <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+        <div className="bg-white/90 backdrop-blur-lg rounded-lg p-6 max-w-md mx-4">
+          <p className="text-red-600 mb-4">{error}</p>
           <button
             onClick={onClose}
             className="w-full px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"

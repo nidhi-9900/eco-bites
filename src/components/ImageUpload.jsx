@@ -60,7 +60,7 @@ export default function ImageUpload({ imagePreview, onImageSelect, onImageCaptur
     <div className="w-full space-y-4">
       {/* Upload Area */}
       <div
-        className="border-2 border-dashed border-gray-300/50 dark:border-gray-700/50 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-3xl p-8 text-center hover:border-yellow-500/80 dark:hover:border-yellow-600/80 hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-300 cursor-pointer"
+        className="border-2 border-dashed border-gray-300/50 bg-white/50 backdrop-blur-sm rounded-3xl p-8 text-center hover:border-yellow-500/80 hover:bg-white/70 transition-all duration-300 cursor-pointer"
         onDragOver={handleDragOver}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
@@ -78,9 +78,9 @@ export default function ImageUpload({ imagePreview, onImageSelect, onImageCaptur
             <img
               src={imagePreview}
               alt="Preview"
-              className="max-h-64 mx-auto rounded-2xl object-contain shadow-xl border border-white/30 dark:border-gray-700/30"
+              className="max-h-64 mx-auto rounded-2xl object-contain shadow-xl border border-white/30"
             />
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+            <p className="text-sm text-gray-600 font-medium">
               Click to change image
             </p>
           </div>
@@ -106,10 +106,10 @@ export default function ImageUpload({ imagePreview, onImageSelect, onImageCaptur
               />
             </svg>
             <div>
-              <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
+              <p className="text-lg font-medium text-gray-700">
                 Upload food product image
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-sm text-gray-500 mt-1">
                 Click to browse or drag and drop
               </p>
             </div>

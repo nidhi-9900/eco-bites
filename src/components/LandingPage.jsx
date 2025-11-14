@@ -3,7 +3,6 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import ThemeToggle from '@/components/ThemeToggle';
 
 export default function LandingPage() {
   const { user, loading, signInWithGoogle } = useAuth();
@@ -48,10 +47,6 @@ export default function LandingPage() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-yellow-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
       
-      {/* Theme Toggle */}
-      <div className="absolute top-6 right-6 z-10">
-        <ThemeToggle />
-      </div>
       <div className="container mx-auto px-4 py-16 relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Hero Section */}
@@ -69,7 +64,7 @@ export default function LandingPage() {
 
           {/* Features Grid */}
           <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <div className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300 hover:scale-105">
+            <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/50 hover:shadow-2xl transition-all duration-300 hover:scale-105">
               <div className="w-14 h-14 bg-yellow-100 rounded-2xl flex items-center justify-center mb-4">
                 <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
@@ -84,7 +79,7 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300 hover:scale-105">
+            <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/50 hover:shadow-2xl transition-all duration-300 hover:scale-105">
               <div className="w-14 h-14 bg-yellow-100 rounded-2xl flex items-center justify-center mb-4">
                 <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -98,7 +93,7 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-6 shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300 hover:scale-105">
+            <div className="bg-white/70 backdrop-blur-lg rounded-3xl p-6 shadow-xl border border-white/50 hover:shadow-2xl transition-all duration-300 hover:scale-105">
               <div className="w-14 h-14 bg-yellow-100 rounded-2xl flex items-center justify-center mb-4">
                 <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
@@ -114,7 +109,7 @@ export default function LandingPage() {
           </div>
 
           {/* CTA Section */}
-          <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 text-center border border-gray-200">
+          <div className="bg-white/70 backdrop-blur-lg rounded-3xl shadow-2xl p-8 md:p-12 text-center border border-white/50">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Get Started Today
             </h2>
