@@ -1,29 +1,43 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function SearchBar({ onSearch, placeholder = 'Search for food products...' }) {
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
+  const lastSearchedRef = useRef('');
+  const onSearchRef = useRef(onSearch);
+
+  // Keep the ref updated with the latest onSearch function
+  useEffect(() => {
+    onSearchRef.current = onSearch;
+  }, [onSearch]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query);
-    }, 500);
+    }, 800); // Increased debounce delay to reduce API calls
 
     return () => clearTimeout(timer);
   }, [query]);
 
   useEffect(() => {
-    if (debouncedQuery.trim()) {
-      onSearch(debouncedQuery);
+    const normalizedQuery = debouncedQuery.trim().toLowerCase();
+    
+    // Only search if query changed and is not empty
+    if (normalizedQuery && normalizedQuery !== lastSearchedRef.current) {
+      lastSearchedRef.current = normalizedQuery;
+      onSearchRef.current(debouncedQuery);
     }
-  }, [debouncedQuery, onSearch]);
+  }, [debouncedQuery]); // Removed onSearch from dependencies
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (query.trim()) {
-      onSearch(query);
+    const trimmedQuery = query.trim();
+    if (trimmedQuery && trimmedQuery.toLowerCase() !== lastSearchedRef.current) {
+      lastSearchedRef.current = trimmedQuery.toLowerCase();
+      setDebouncedQuery(trimmedQuery); // Trigger search immediately
+      onSearch(trimmedQuery);
     }
   };
 

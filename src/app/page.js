@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import SearchBar from '@/components/SearchBar';
 import ProductCard from '@/components/ProductCard';
 import LoadingSkeleton from '@/components/LoadingSkeleton';
@@ -11,45 +11,96 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
+  
+  // Track the last searched query and ongoing requests to prevent duplicates
+  const lastQueryRef = useRef(null);
+  const ongoingRequestRef = useRef(null);
 
-  const handleSearch = async (query) => {
+  const handleSearch = useCallback(async (query) => {
     if (!query.trim()) {
       setProducts([]);
       setHasSearched(false);
+      lastQueryRef.current = null;
       return;
     }
 
+    // Normalize query for comparison
+    const normalizedQuery = query.trim().toLowerCase();
+    
+    // Prevent duplicate searches for the exact same query
+    if (lastQueryRef.current === normalizedQuery) {
+      return;
+    }
+
+    // Cancel any ongoing request
+    if (ongoingRequestRef.current) {
+      // Note: We can't cancel fetch, but we can prevent state updates
+      ongoingRequestRef.current = null;
+    }
+
+    // Mark this query as being searched
+    lastQueryRef.current = normalizedQuery;
     setLoading(true);
     setError(null);
     setHasSearched(true);
 
+    // Create abort controller for request cancellation
+    const abortController = new AbortController();
+    ongoingRequestRef.current = abortController;
+
     try {
-      const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+      const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`, {
+        signal: abortController.signal,
+      });
+      
+      // Check if request was aborted
+      if (abortController.signal.aborted) {
+        return;
+      }
       
       if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error('Too many requests. Please wait a moment and try again.');
+        }
         throw new Error('Failed to search products');
       }
 
       const data = await response.json();
-      setProducts(data.products || []);
+      
+      // Only update state if this is still the current request
+      if (!abortController.signal.aborted) {
+        setProducts(data.products || []);
+      }
 
-      // Save to history
-      try {
-        await fetch('/api/history', {
+      // Save to history (non-blocking, don't await)
+      if (!abortController.signal.aborted) {
+        fetch('/api/history', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ query }),
+        }).catch((err) => {
+          console.error('Failed to save history:', err);
         });
-      } catch (err) {
-        console.error('Failed to save history:', err);
       }
     } catch (err) {
-      setError(err.message);
-      setProducts([]);
+      // Ignore abort errors
+      if (err.name === 'AbortError') {
+        return;
+      }
+      
+      // Only update state if this is still the current request
+      if (!abortController.signal.aborted) {
+        setError(err.message);
+        setProducts([]);
+      }
     } finally {
-      setLoading(false);
+      // Only update loading state if this is still the current request
+      if (!abortController.signal.aborted) {
+        setLoading(false);
+        ongoingRequestRef.current = null;
+      }
     }
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

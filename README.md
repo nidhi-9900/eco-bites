@@ -71,40 +71,77 @@ npm install
    - You should see a success message confirming the tables were created
    - Verify by going to **Table Editor** - you should see `users` and `search_history` tables
 
-4. Create environment variables:
+4. Set up OpenFoodFacts API (Optional but Recommended):
+
+   **Getting an OpenFoodFacts API Key:**
+   - Go to [OpenFoodFacts.org](https://world.openfoodfacts.org/)
+   - Click "Sign in" or "Create account" (top right)
+   - After logging in, go to your [user settings](https://world.openfoodfacts.org/cgi/user.pl)
+   - Look for "API Key" or "Developer" section
+   - Request an API key (it's free and helps with rate limits)
+   - Copy your API key
+
+   **Note**: The API works without a key, but having one:
+   - Increases rate limits
+   - Helps track usage
+   - Provides better reliability
+
+5. Create environment variables:
    - In the root directory of your project, create a file named `.env.local`
-   - Add your Supabase credentials (replace with your actual values):
+   - Add your credentials (replace with your actual values):
 ```env
+# Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4eHh4eHh4eHh4eHh4eHh4eHgiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MTk2ODgwMCwiZXhwIjoxOTU3NTQ0ODAwfQ.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# OpenFoodFacts API Key (Optional but recommended)
+OPENFOODFACTS_API_KEY=your_api_key_here
 ```
    - **Important**: 
-     - Replace `https://xxxxxxxxxxxxx.supabase.co` with your actual Project URL
-     - Replace the long `eyJ...` string with your actual anon/public key
+     - Replace `https://xxxxxxxxxxxxx.supabase.co` with your actual Supabase Project URL
+     - Replace the long `eyJ...` string with your actual Supabase anon/public key
+     - Replace `your_api_key_here` with your OpenFoodFacts API key (or leave it out if you don't have one)
      - Never commit `.env.local` to git (it's already in `.gitignore`)
      - The `.env.local` file should be in the same directory as `package.json`
 
-5. Run the development server:
+6. Run the development server:
 ```bash
 npm run dev
 ```
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser
+7. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ### Quick Reference: Environment Variables
 
 Your `.env.local` file should look exactly like this (with your actual values):
 
 ```env
+# Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=https://abcdefghijklmnop.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFiY2RlZmdoaWprbG1ub3AiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MTk2ODgwMCwiZXhwIjoxOTU3NTQ0ODAwfQ.abc123def456ghi789jkl012mno345pqr678stu901vwx234yz
+
+# OpenFoodFacts API Key (Optional)
+OPENFOODFACTS_API_KEY=your_api_key_here
 ```
 
 **Where to find these values:**
 1. **Project URL**: Settings → API → Project URL
 2. **Anon Key**: Settings → API → Project API keys → `anon` `public` key
 
-**Note**: The app will work without Supabase (search and product viewing), but the search history feature requires Supabase to be configured.
+**Note**: 
+- The app will work without Supabase (search and product viewing), but the search history feature requires Supabase to be configured.
+- The app will work without an OpenFoodFacts API key, but having one improves rate limits and reliability.
+
+## API Request Optimization
+
+The app includes several optimizations to reduce API calls:
+
+- **Caching**: Search results and product details are cached for 5 minutes
+- **Request Deduplication**: Prevents multiple identical requests from running simultaneously
+- **Debouncing**: Search input is debounced by 800ms to reduce rapid-fire requests
+- **Error Handling**: Proper handling of rate limit errors (429 status)
+
+These optimizations significantly reduce the number of API calls while maintaining a smooth user experience.
 
 ## Project Structure
 

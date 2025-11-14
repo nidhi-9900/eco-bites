@@ -27,13 +27,19 @@ export default function ProductPage() {
         const response = await fetch(`/api/product/${params.id}`);
         
         if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
           if (response.status === 404) {
-            throw new Error('Product not found');
+            throw new Error(errorData.error || 'Product not found');
           }
-          throw new Error('Failed to fetch product');
+          throw new Error(errorData.error || errorData.message || 'Failed to fetch product');
         }
 
         const data = await response.json();
+        
+        if (!data.product) {
+          throw new Error('Product data is missing');
+        }
+        
         setProduct(data.product);
 
         // Save to history
