@@ -107,10 +107,10 @@ function ProfileContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading profile...</p>
+          <div className="w-16 h-16 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading profile...</p>
         </div>
       </div>
     );
@@ -119,14 +119,14 @@ function ProfileContent() {
   const badges = getBadges();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <header className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <Link
               href="/scanner"
-              className="inline-flex items-center gap-2 px-4 py-2 text-green-600 hover:text-green-700 dark:text-green-400 font-semibold rounded-2xl hover:bg-green-50 dark:hover:bg-green-900/20 transition-all duration-300"
+              className="inline-flex items-center gap-2 px-4 py-2 text-yellow-600 hover:text-yellow-700 dark:text-yellow-400 font-semibold rounded-2xl hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-all duration-300"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -138,7 +138,7 @@ function ProfileContent() {
         </header>
 
         {/* Profile Header Card */}
-        <div className="bg-gradient-to-r from-green-500 via-green-600 to-blue-600 rounded-3xl shadow-2xl p-8 mb-6 text-white relative overflow-hidden">
+        <div className="bg-gradient-to-r from-yellow-500 via-yellow-600 to-black rounded-3xl shadow-2xl p-8 mb-6 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
@@ -152,7 +152,7 @@ function ProfileContent() {
                     className="rounded-full ring-4 ring-white/50 shadow-xl"
                   />
                 ) : (
-                  <div className="w-30 h-30 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-4xl font-bold ring-4 ring-white/50 shadow-xl">
+                  <div className="w-30 h-30 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-4xl font-bold ring-4 ring-white/50 shadow-xl text-white">
                     {user?.email?.[0]?.toUpperCase() || 'U'}
                   </div>
                 )}
@@ -162,7 +162,7 @@ function ProfileContent() {
               </div>
               
               <div className="flex-1 text-center md:text-left">
-                <h1 className="text-4xl md:text-5xl font-bold mb-2">
+                <h1 className="text-4xl md:text-5xl font-bold mb-2 text-white">
                   {user?.displayName || user?.email?.split('@')[0] || 'User'}
                 </h1>
                 <p className="text-xl md:text-2xl text-white/90 mb-4">
@@ -173,21 +173,21 @@ function ProfileContent() {
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 mb-4">
                   <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3">
                     <div className="text-sm text-white/80">Total Points</div>
-                    <div className="text-3xl font-bold">{stats.points}</div>
+                    <div className="text-3xl font-bold text-white">{stats.points}</div>
                   </div>
                   <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3">
                     <div className="text-sm text-white/80">Contributions</div>
-                    <div className="text-3xl font-bold">{stats.totalContributions}</div>
+                    <div className="text-3xl font-bold text-white">{stats.totalContributions}</div>
                   </div>
                   <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-6 py-3">
                     <div className="text-sm text-white/80">Scans</div>
-                    <div className="text-3xl font-bold">{stats.totalScans}</div>
+                    <div className="text-3xl font-bold text-white">{stats.totalScans}</div>
                   </div>
                 </div>
 
                 {/* Level Progress Bar */}
                 <div className="mt-4">
-                  <div className="flex justify-between text-sm mb-2">
+                  <div className="flex justify-between text-sm mb-2 text-white/90">
                     <span>Level {stats.level}</span>
                     <span>{stats.points % 100} / 100 to Level {stats.level + 1}</span>
                   </div>
@@ -205,8 +205,8 @@ function ProfileContent() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Badges Section */}
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl shadow-xl border border-white/30 dark:border-gray-700/50 p-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <span>🏆</span>
               Achievements & Badges
             </h2>
@@ -215,25 +215,25 @@ function ProfileContent() {
                 {badges.map((badge, index) => (
                   <div
                     key={index}
-                    className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 rounded-2xl p-4 text-center border border-gray-200/50 dark:border-gray-600/50"
+                    className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4 text-center border border-gray-200/50"
                   >
                     <div className="text-4xl mb-2">{badge.icon}</div>
-                    <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                    <div className="text-sm font-semibold text-gray-900">
                       {badge.name}
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 dark:text-gray-400 text-center py-8">
+              <p className="text-gray-500 text-center py-8">
                 Start contributing to earn your first badge! 🎯
               </p>
             )}
           </div>
 
           {/* Recent Contributions */}
-          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl shadow-xl border border-white/30 dark:border-gray-700/50 p-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <div className="bg-white rounded-3xl shadow-xl border border-gray-200 p-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
               <span>📝</span>
               Recent Contributions
             </h2>
@@ -242,24 +242,24 @@ function ProfileContent() {
                 {recentContributions.map((contribution) => (
                   <div
                     key={contribution.id}
-                    className="bg-gray-50/80 dark:bg-gray-700/80 rounded-2xl p-4 border border-gray-200/50 dark:border-gray-600/50"
+                    className="bg-gray-50 rounded-2xl p-4 border border-gray-200/50"
                   >
-                    <div className="font-semibold text-gray-900 dark:text-white">
+                    <div className="font-semibold text-gray-900">
                       {contribution.productName}
                     </div>
                     {contribution.brand && (
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                      <div className="text-sm text-gray-600">
                         {contribution.brand}
                       </div>
                     )}
-                    <div className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+                    <div className="text-xs text-gray-500 mt-2">
                       +10 points
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 dark:text-gray-400 text-center py-8">
+              <p className="text-gray-500 text-center py-8">
                 No contributions yet. Start contributing to build your profile! 🚀
               </p>
             )}
@@ -267,28 +267,28 @@ function ProfileContent() {
         </div>
 
         {/* Points System Info */}
-        <div className="mt-6 bg-blue-50/80 dark:bg-blue-900/30 backdrop-blur-sm border border-blue-200/50 dark:border-blue-800/50 rounded-2xl p-6">
-          <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-3">
+        <div className="mt-6 bg-yellow-50 backdrop-blur-sm border border-yellow-200/50 rounded-2xl p-6">
+          <h3 className="text-lg font-semibold text-yellow-900 mb-3">
             💰 How to Earn Points
           </h3>
-          <div className="grid md:grid-cols-2 gap-4 text-sm text-blue-800 dark:text-blue-300">
+          <div className="grid md:grid-cols-2 gap-4 text-sm text-yellow-800">
             <div className="flex items-start gap-3">
               <span className="text-2xl">📦</span>
               <div>
                 <div className="font-semibold">Contribute a Product</div>
-                <div className="text-blue-600 dark:text-blue-400">Earn 10 points per contribution</div>
+                <div className="text-yellow-600">Earn 10 points per contribution</div>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="text-2xl">📸</span>
               <div>
                 <div className="font-semibold">Scan a Product</div>
-                <div className="text-blue-600 dark:text-blue-400">Earn 1 point per scan</div>
+                <div className="text-yellow-600">Earn 1 point per scan</div>
               </div>
             </div>
           </div>
-          <div className="mt-4 pt-4 border-t border-blue-200/50 dark:border-blue-700/50">
-            <p className="text-sm text-blue-700 dark:text-blue-300">
+          <div className="mt-4 pt-4 border-t border-yellow-200/50">
+            <p className="text-sm text-yellow-700">
               <strong>Level Up:</strong> Every 100 points = 1 level. Higher levels unlock exclusive badges and recognition!
             </p>
           </div>
@@ -298,7 +298,7 @@ function ProfileContent() {
         <div className="mt-6 text-center">
           <Link
             href="/dataset"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

@@ -9,12 +9,12 @@ export default function ScoreInfo({ type = 'nutri' }) {
     nutri: {
       title: 'Nutri-Score',
       description: 'A 5-color nutrition label (A to E) that helps you quickly identify the nutritional quality of food products. A (green) = best nutritional quality, E (red) = lowest nutritional quality.',
-      titleClass: 'text-green-600 dark:text-green-400',
+      titleClass: 'text-yellow-600 dark:text-yellow-400',
     },
     eco: {
       title: 'Eco-Score',
       description: 'An environmental impact score (A to E) that indicates the product\'s environmental footprint. A (green) = lowest environmental impact, E (red) = highest environmental impact. Considers factors like packaging, transportation, and production methods.',
-      titleClass: 'text-blue-600 dark:text-blue-400',
+      titleClass: 'text-yellow-600 dark:text-yellow-400',
     },
   };
 

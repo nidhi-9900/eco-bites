@@ -36,10 +36,10 @@ export default function UserMenu() {
                 alt={user.displayName || 'User'}
                 width={36}
                 height={36}
-                className="rounded-full ring-2 ring-green-500/20"
+                className="rounded-full ring-2 ring-yellow-500/20"
               />
             ) : (
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white font-semibold shadow-md">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center text-black font-semibold shadow-md">
                 {user.email?.[0]?.toUpperCase() || 'U'}
               </div>
             )}
