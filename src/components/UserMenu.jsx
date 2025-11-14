@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -8,6 +9,8 @@ import Image from 'next/image';
 export default function UserMenu() {
   const { user, loading, signInWithGoogle, signOut } = useAuth();
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef(null);
 
   if (loading) {
     return (
@@ -23,10 +26,37 @@ export default function UserMenu() {
     }
   };
 
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isOpen]);
+
+  // Close menu when navigating
+  const handleLinkClick = () => {
+    setIsOpen(false);
+  };
+
   if (user) {
     return (
-      <div className="relative group">
-        <button className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/60 backdrop-blur-lg hover:bg-white/80 border border-white/40 shadow-lg hover:shadow-xl transition-all duration-300">
+      <div className="relative group" ref={menuRef}>
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-white/60 backdrop-blur-lg hover:bg-white/80 border border-white/40 shadow-lg hover:shadow-xl transition-all duration-300"
+        >
           {user.photoURL ? (
             <Image
               src={user.photoURL}
@@ -43,12 +73,23 @@ export default function UserMenu() {
           <span className="text-sm font-semibold text-gray-700 hidden sm:inline">
             {user.displayName || user.email?.split('@')[0]}
           </span>
-          <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg 
+            className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
         
-        <div className="absolute right-0 mt-2 w-56 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/40 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 overflow-hidden">
+        <div 
+          className={`absolute right-0 mt-2 w-56 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/40 transition-all duration-300 z-50 overflow-hidden ${
+            isOpen 
+              ? 'opacity-100 visible' 
+              : 'opacity-0 invisible md:group-hover:opacity-100 md:group-hover:visible'
+          }`}
+        >
           <div className="p-4 border-b border-gray-200/50">
             <p className="text-sm font-semibold text-gray-900">
               {user.displayName || 'User'}
@@ -59,7 +100,8 @@ export default function UserMenu() {
           </div>
           <Link
             href="/profile"
-            className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50/80 transition-colors duration-200 flex items-center gap-2"
+            onClick={handleLinkClick}
+            className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50/80 active:bg-gray-50/80 transition-colors duration-200 flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -67,8 +109,11 @@ export default function UserMenu() {
             My Profile
           </Link>
           <button
-            onClick={signOut}
-            className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50/80 transition-colors duration-200 flex items-center gap-2"
+            onClick={() => {
+              setIsOpen(false);
+              signOut();
+            }}
+            className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50/80 active:bg-red-50/80 transition-colors duration-200 flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
