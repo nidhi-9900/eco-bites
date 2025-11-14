@@ -711,7 +711,7 @@ export default function DatasetForm({ onSuccess, onCancel }) {
         <div className="flex gap-4">
           <button
             type="submit"
-            disabled={loading || !productImage || !nutritionImage}
+            disabled={loading || !formData.productName.trim()}
             className="flex-1 px-6 py-3.5 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 disabled:transform-none"
           >
             {loading ? (
@@ -761,6 +761,14 @@ export default function DatasetForm({ onSuccess, onCancel }) {
           onClose={() => setShowNutritionCamera(false)}
         />
       )}
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.isVisible}
+        onClose={hideToast}
+      />
     </form>
   );
 }
